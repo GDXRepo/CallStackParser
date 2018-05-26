@@ -20,11 +20,12 @@ extension NSObject {
     }
     
     func d(_ string: String) {
+        let dt = Date().description
         if let symbol = CallStackParser.classAndMethodForStackSymbol(Thread.callStackSymbols[1]) {
-            print("[\(symbol.0)] \(symbol.1) \(string)")
+            print("\(dt) [\(symbol.0)] \(symbol.1) \(string)")
         }
         else {
-            print("[\(typename)] \(#function)] \(string)")
+            print("\(dt) [\(typename)] \(string)")
         }
     }
     
