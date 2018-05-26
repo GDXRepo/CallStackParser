@@ -21,12 +21,13 @@ extension NSObject {
     
     func d(_ string: String) {
         let dt = Date().description
-        if let symbol = CallStackParser.classAndMethodForStackSymbol(Thread.callStackSymbols[1]) {
-            print("\(dt) [\(symbol.0)] \(symbol.1) \(string)")
+        for symbol in Thread.callStackSymbols[1...] {
+            if let parsed = CallStackParser.classAndMethodForStackSymbol(symbol) {
+                print("\(dt) [\(parsed.0)] \(parsed.1) \(string)")
+                return
+            }
         }
-        else {
-            print("\(dt) [\(typename)] \(string)")
-        }
+        print("\(dt) [\(typename)] \(string)")
     }
     
 }
