@@ -6,6 +6,8 @@
 //  Copyright © 2018 Georgiy Malyukov. All rights reserved.
 //
 
+import Foundation
+
 extension NSObject {
     
     var typenameFull: String {
