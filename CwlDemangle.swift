@@ -4265,7 +4265,7 @@ fileprivate struct ScalarScanner<C: Collection> where C.Iterator.Element == Unic
     }
     
     /// Throw if the scalars at the current `index` don't match the scalars in `value`. Advance the `index` to the end of the match.
-    mutating func match(where test: (UnicodeScalar) -> Bool) throws {
+    mutating func match(where test: @escaping (UnicodeScalar) -> Bool) throws {
         if index == scalars.endIndex || !test(scalars[index]) {
             throw SwiftSymbolParseError.matchFailed(wanted: String(describing: test), at: consumed)
         }
@@ -4274,7 +4274,7 @@ fileprivate struct ScalarScanner<C: Collection> where C.Iterator.Element == Unic
     }
     
     /// Throw if the scalars at the current `index` don't match the scalars in `value`. Advance the `index` to the end of the match.
-    mutating func read(where test: (UnicodeScalar) -> Bool) throws -> UnicodeScalar {
+    mutating func read(where test: @escaping (UnicodeScalar) -> Bool) throws -> UnicodeScalar {
         if index == scalars.endIndex || !test(scalars[index]) {
             throw SwiftSymbolParseError.matchFailed(wanted: String(describing: test), at: consumed)
         }
