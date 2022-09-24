@@ -1,80 +1,52 @@
 //
 //  String+Extensions.swift
 //
-//  https://stackoverflow.com/a/24144365
-//  Copyright © 2018 aleclarson. All rights reserved.
+//  https://stackoverflow.com/questions/24092884/get-nth-character-of-a-string-in-swift-programming-language/38215613#38215613
+//  Copyright © 2020 Leo Dabus. All rights reserved.
 //
 
 import Foundation
 
-extension String {
-    
-    subscript (i: Int) -> Character {
-        return self[index(startIndex, offsetBy: i)]
+public extension StringProtocol {
+
+    subscript(_ offset: Int) -> Element {
+        self[index(startIndex, offsetBy: offset)]
     }
-    
-    subscript (bounds: CountableRange<Int>) -> Substring {
-        let start = index(startIndex, offsetBy: bounds.lowerBound)
-        let end = index(startIndex, offsetBy: bounds.upperBound)
-        return self[start ..< end]
+
+    subscript(_ range: Range<Int>) -> SubSequence {
+        prefix(range.lowerBound + range.count).suffix(range.count)
     }
-    
-    subscript (bounds: CountableClosedRange<Int>) -> Substring {
-        let start = index(startIndex, offsetBy: bounds.lowerBound)
-        let end = index(startIndex, offsetBy: bounds.upperBound)
-        return self[start ... end]
+
+    subscript(_ range: ClosedRange<Int>) -> SubSequence {
+        prefix(range.lowerBound + range.count).suffix(range.count)
     }
-    
-    subscript (bounds: CountablePartialRangeFrom<Int>) -> Substring {
-        let start = index(startIndex, offsetBy: bounds.lowerBound)
-        let end = index(endIndex, offsetBy: -1)
-        return self[start ... end]
+
+    subscript(_ range: PartialRangeThrough<Int>) -> SubSequence {
+        prefix(range.upperBound.advanced(by: 1))
     }
-    
-    subscript (bounds: PartialRangeThrough<Int>) -> Substring {
-        let end = index(startIndex, offsetBy: bounds.upperBound)
-        return self[startIndex ... end]
+
+    subscript(_ range: PartialRangeUpTo<Int>) -> SubSequence {
+        prefix(range.upperBound)
     }
-    
-    subscript (bounds: PartialRangeUpTo<Int>) -> Substring {
-        let end = index(startIndex, offsetBy: bounds.upperBound)
-        return self[startIndex ..< end]
+
+    subscript(_ range: PartialRangeFrom<Int>) -> SubSequence {
+        suffix(Swift.max(0, count - range.lowerBound))
     }
-    
 }
 
-extension Substring {
-    
-    subscript (i: Int) -> Character {
-        return self[index(startIndex, offsetBy: i)]
+public extension LosslessStringConvertible {
+
+    var string: String {
+        .init(self)
     }
-    
-    subscript (bounds: CountableRange<Int>) -> Substring {
-        let start = index(startIndex, offsetBy: bounds.lowerBound)
-        let end = index(startIndex, offsetBy: bounds.upperBound)
-        return self[start ..< end]
+}
+
+public extension BidirectionalCollection {
+
+    subscript(safe offset: Int) -> Element? {
+        guard !isEmpty, let i = index(startIndex, offsetBy: offset, limitedBy: index(before: endIndex)) else {
+            return nil
+        }
+        return self[i]
     }
-    
-    subscript (bounds: CountableClosedRange<Int>) -> Substring {
-        let start = index(startIndex, offsetBy: bounds.lowerBound)
-        let end = index(startIndex, offsetBy: bounds.upperBound)
-        return self[start ... end]
-    }
-    
-    subscript (bounds: CountablePartialRangeFrom<Int>) -> Substring {
-        let start = index(startIndex, offsetBy: bounds.lowerBound)
-        let end = index(endIndex, offsetBy: -1)
-        return self[start ... end]
-    }
-    
-    subscript (bounds: PartialRangeThrough<Int>) -> Substring {
-        let end = index(startIndex, offsetBy: bounds.upperBound)
-        return self[startIndex ... end]
-    }
-    
-    subscript (bounds: PartialRangeUpTo<Int>) -> Substring {
-        let end = index(startIndex, offsetBy: bounds.upperBound)
-        return self[startIndex ..< end]
-    }
-    
 }

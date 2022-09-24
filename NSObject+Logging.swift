@@ -2,32 +2,31 @@
 //  NSObject+Logging.swift
 //  GDXRepo
 //
-//  Created by Георгий Малюков on 26.05.2018.
-//  Copyright © 2018 Georgiy Malyukov. All rights reserved.
+//  Created by Georgiy Malyukov on 26.05.2018.
+//  Copyright © 2022 Georgiy Malyukov. All rights reserved.
 //
 
 import Foundation
 
 extension NSObject {
     
-    var typenameFull: String {
-        return NSStringFromClass(type(of: self))
+    var fullTypename: String {
+        NSStringFromClass(type(of: self))
     }
     
-    var typename: String {
-        let full = NSStringFromClass(type(of: self))
-        return full.regexReplace(pattern: "^[^\\.]+\\.", replace: "")
+    var shortTypename: String {
+        fullTypename.replacingOccurrences(of: "^[^\\.]+\\.", with: "", options: .regularExpression, range: nil)
     }
     
     func d(_ string: String) {
         let dt = Date().description
+
         for symbol in Thread.callStackSymbols[1...] {
-            if let parsed = CallStackParser.classAndMethodForStackSymbol(symbol) {
+            if let parsed = CallStackParser.parse(stackSymbol: symbol) {
                 print("\(dt) [\(parsed.0)] \(parsed.1) \(string)")
                 return
             }
         }
-        print("\(dt) [\(typename)] \(string)")
+        print("\(dt) [\(shortTypename)] \(string)")
     }
-    
 }
